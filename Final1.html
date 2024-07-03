@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Tax Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><text x="10" y="100" font-size="30" font-family="Arial" fill="rgba(0,0,0,0.1)">TaxMate</text></svg>');
+            background-repeat: repeat;
+            background-size: 200px 200px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+        .saved-searches {
+            margin-top: 20px;
+        }
+        .saved-searches ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .saved-searches ul li {
+            margin-bottom: 5px;
+        }
+        .info-section {
+            margin-top: 20px;
+        }
+        .info-section h2 {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <a href="Introduction1.html">Home</a>
+    <div class="container">
+        <h1>Indian Tax Calculator</h1>
+        <div class="form-group">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name">
+        </div>
+        <form id="taxForm">
+            <div class="form-group">
+                <label for="income">Enter your Total Income:</label>
+                <input type="number" id="income" name="income" required oninput="showDefaultTax()">
+            </div>
+            <div class="form-group">
+                <label for="deductions">Enter your Deductions (if any):</label>
+                <input type="number" id="deductions" name="deductions">
+            </div>
+            <div class="form-group">
+                <label for="otherTaxes">Enter other Taxes (if any):</label>
+                <input type="number" id="otherTaxes" name="otherTaxes">
+            </div>
+            <div class="form-group">
+                <label for="investment">Enter your Investments (if any):</label>
+                <input type="number" id="investment" name="investment">
+            </div>
+            <div class="form-group">
+                <label for="taxMode">Select Tax Mode:</label>
+                <select id="taxMode" name="taxMode" onchange="showDefaultTax()">
+                    <option value="old">Old Tax Regime</option>
+                    <option value="new">New Tax Regime</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="calculateTax()">Calculate Tax</button>
+            </div>
+        </form>
+        <div class="result" id="result"></div>
+        <div class="saved-searches" id="savedSearches">
+            <h2>Saved Searches</h2>
+            <ul id="searchList"></ul>
+        </div>
+        <div class="form-group">
+            <button type="button" onclick="saveSearch()">Save</button>
+            <button type="button" onclick="clearForm()">Clear</button>
+        </div>
+        <div class="info-section">
+            <h2>Old Tax Regime</h2>
+            <p>The old tax regime allows taxpayers to claim various deductions and exemptions, such as those under Section 80C, 80D, and 24(b).</p>
+            <h2>New Tax Regime</h2>
+            <p>The new tax regime offers lower tax rates but does not allow most deductions and exemptions that are available in the old tax regime.</p>
+            <p><strong>Disclaimer:</strong> This calculator provides an estimate of your tax liability based on the information provided. For precise tax calculations and advice, please consult a tax professional.</p>
+        </div>
+    </div>
+
+    <script>
+        function calculateTax() {
+            var name = document.getElementById('name').value;
+            var income = parseFloat(document.getElementById('income').value);
+            var deductions = parseFloat(document.getElementById('deductions').value) || 0;
+            var otherTaxes = parseFloat(document.getElementById('otherTaxes').value) || 0;
+            var investment = parseFloat(document.getElementById('investment').value) || 0;
+            var taxMode = document.getElementById('taxMode').value;
+
+            var taxableIncome = income - deductions - otherTaxes - investment;
+
+            // Ensure taxableIncome is not less than zero
+            if (taxableIncome < 0) {
+                taxableIncome = 0;
+            }
+
+            var tax = calculateTaxPayable(taxableIncome, taxMode);
+
+            var resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<h2>Tax Calculation Result</h2>
+                                   <p>Name: ${name}</p>
+                                   <p>Total Income: ₹${income.toFixed(2)}</p>
+                                   <p>Deductions: ₹${deductions.toFixed(2)}</p>
+                                   <p>Other Taxes: ₹${otherTaxes.toFixed(2)}</p>
+                                   <p>Investments: ₹${investment.toFixed(2)}</p>
+                                   <p>Taxable Income: ₹${taxableIncome.toFixed(2)}</p>
+                                   <p>Tax Payable: ₹${tax.toFixed(2)}</p>`;
+        }
+
+        function showDefaultTax() {
+            var income = parseFloat(document.getElementById('income').value) || 0;
+            var taxMode = document.getElementById('taxMode').value;
+            var tax = calculateTaxPayable(income, taxMode);
+
+            var resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<h2>Default Tax Calculation</h2>
+                                   <p>Income: ₹${income.toFixed(2)}</p>
+                                   <p>Tax Payable: ₹${tax.toFixed(2)}</p>`;
+        }
+
+        function calculateTaxPayable(income, taxMode) {
+            var tax = 0;
+
+            if (taxMode === 'old') {
+                if (income <= 250000) {
+                    tax = 0;
+                } else if (income <= 500000) {
+                    tax = (income - 250000) * 0.05;
+                } else if (income <= 1000000) {
+                    tax = 12500 + (income - 500000) * 0.2;
+                } else {
+                    tax = 112500 + (income - 1000000) * 0.3;
+                }
+            } else if (taxMode === 'new') {
+                if (income <= 250000) {
+                    tax = 0;
+                } else if (income <= 500000) {
+                    tax = (income - 250000) * 0.05;
+                } else if (income <= 750000) {
+                    tax = 12500 + (income - 500000) * 0.1;
+                } else if (income <= 1000000) {
+                    tax = 37500 + (income - 750000) * 0.15;
+                } else if (income <= 1250000) {
+                    tax = 75000 + (income - 1000000) * 0.2;
+                } else if (income <= 1500000) {
+                    tax = 125000 + (income - 1250000) * 0.25;
+                } else {
+                    tax = 187500 + (income - 1500000) * 0.3;
+                }
+            }
+
+            return tax;
+        }
+
+        function saveSearch() {
+            var name = document.getElementById('name').value;
+            var searchDetails = `Name: ${name}, Income: ₹${document.getElementById('income').value}`;
+            var searchList = document.getElementById('searchList');
+            var listItem = document.createElement('li');
+            listItem.textContent = searchDetails;
+            searchList.appendChild(listItem);
+        }
+
+        function clearForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('income').value = '';
+            document.getElementById('deductions').value = '';
+            document.getElementById('otherTaxes').value = '';
+            document.getElementById('investment').value = '';
+            document.getElementById('taxMode').value = 'old';
+            document.getElementById('result').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

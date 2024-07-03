@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Tax Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+        .saved-searches {
+            margin-top: 20px;
+        }
+        .saved-searches ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .saved-searches ul li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+	<a href= "Introduction1.html">Home </a>
+    <div class="container">
+        <h1>Indian Tax Calculator</h1>
+        <div class="form-group">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name">
+        </div>
+        <form id="taxForm">
+            <div class="form-group">
+                <label for="income">Enter your Total Income:</label>
+                <input type="number" id="income" name="income" required>
+            </div>
+            <div class="form-group">
+                <label for="deductions">Enter your Deductions (if any):</label>
+                <input type="number" id="deductions" name="deductions">
+            </div>
+            <div class="form-group">
+                <label for="otherTaxes">Enter other Taxes (if any):</label>
+                <input type="number" id="otherTaxes" name="otherTaxes">
+            </div>
+            <div class="form-group">
+                <label for="investment">Enter your Investments (if any):</label>
+                <input type="number" id="investment" name="investment">
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="calculateTax()">Calculate Tax</button>
+            </div>
+        </form>
+        <div class="result" id="result"></div>
+        <div class="saved-searches" id="savedSearches">
+            <h2>Saved Searches</h2>
+            <ul id="searchList"></ul>
+        </div>
+        <div class="form-group">
+            <button type="button" onclick="saveSearch()">Save</button>
+            <button type="button" onclick="clearForm()">Clear</button>
+        </div>
+    </div>
+
+    <script>
+        function calculateTax() {
+            var name = document.getElementById('name').value;
+            var income = parseFloat(document.getElementById('income').value);
+            var deductions = parseFloat(document.getElementById('deductions').value) || 0;
+            var otherTaxes = parseFloat(document.getElementById('otherTaxes').value) || 0;
+            var investment = parseFloat(document.getElementById('investment').value) || 0;
+            
+            var taxableIncome = income - deductions - otherTaxes - investment;
+
+            var tax = 0;
+            if (taxableIncome <= 250000) {
+                tax = 0;
+            } else if (taxableIncome <= 500000) {
+                tax = (taxableIncome - 250000) * 0.05;
+            } else if (taxableIncome <= 1000000) {
+                tax = 12500 + (taxableIncome - 500000) * 0.2;
+            } else {
+                tax = 112500 + (taxableIncome - 1000000) * 0.3;
+            }
+
+            var resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<h2>Tax Calculation Result</h2>
+                                   <p>Name: ${name}</p>
+                                   <p>Total Income: ₹${income.toFixed(2)}</p>
+                                   <p>Deductions: ₹${deductions.toFixed(2)}</p>
+                                   <p>Other Taxes: ₹${otherTaxes.toFixed(2)}</p>
+                                   <p>Investments: ₹${investment.toFixed(2)}</p>
+                                   <p>Taxable Income: ₹${taxableIncome.toFixed(2)}</p>
+                                   <p>Tax Payable: ₹${tax.toFixed(2)}</p>`;
+        }
+
+        function saveSearch() {
+            var name = document.getElementById('name').value;
+            var searchDetails = `Name: ${name}, Income: ₹${document.getElementById('income').value}`;
+            var searchList = document.getElementById('searchList');
+            var listItem = document.createElement('li');
+            listItem.textContent = searchDetails;
+            searchList.appendChild(listItem);
+        }
+
+        function clearForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('income').value = '';
+            document.getElementById('deductions').value = '';
+            document.getElementById('otherTaxes').value = '';
+            document.getElementById('investment').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

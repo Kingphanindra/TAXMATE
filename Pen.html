@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaxMate - Friendly Tax Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            color: #4CAF50;
+        }
+        .intro {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            margin: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body
+	
+	<a href= "Monthly_expenses.html">Personal Desk</a>
+	<a href= "Introduction1.html">Home </a>
+    <div class="container">
+        <div class="header">
+            <h1>TaxMate</h1>
+            <p>Your Friendly Tax Calculator</p>
+        </div>
+        <div class="intro">
+            <p>Welcome to TaxMate! We aim to make your tax calculations easy and stress-free. Use our calculator to quickly figure out your taxes, and explore additional resources for comprehensive information on tax laws and fines in India.</p>
+        </div>
+        <div class="buttons">
+            <button class="button" onclick="openModal('taxLaws')">Tax Laws in India</button>
+            <button class="button" onclick="openModal('finesPenalties')">Fines and Penalties</button>
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalContent">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(contentType) {
+            let content = '';
+            if (contentType === 'taxLaws') {
+                content = `
+                    <h2>Tax Laws in India</h2>
+                    <p><strong>Tax:</strong> The Indian tax system is a comprehensive structure that encompasses both Direct and Indirect taxes.</p>
+                    <p><strong>Direct Taxes:</strong> These types are levied directly on the income earned by individuals and corporate entities. The responsibility for depositing these taxes lies with the taxpayers themselves.</p>
+                    <ul>
+                        <li><strong>Income Tax:</strong> Individuals and companies pay income tax based on their taxable income. The rates vary depending on income levels and other factors.</li>
+                        <li><strong>Central Goods and Service Tax (CGST):</strong> A component of the Goods and Service Tax (GST), CGST is collected by the central government on intra-state transactions.</li>
+                        <li><strong>Customs Duty:</strong> This tax is imposed on goods imported to India.</li>
+                        <li><strong>Integrated Goods and Service Tax (IGST):</strong> Applicable to inter-state transactions under the GST regime.</li>
+                    </ul>
+                    <p><strong>Indirect Taxes:</strong> These are levied on the sale and provision of goods and services. The burden to collect and deposit these taxes lies with the sellers rather than the taxpayers directly.</p>
+                    <ul>
+                        <li><strong>State Goods and Service Tax (SGST):</strong> Part of the GST, SGST is collected by state governments on intra-state transactions.</li>
+                        <li><strong>Stamp Duty and Registration:</strong> Levied on various legal documents and transactions.</li>
+                        <li><strong>Local Municipal Taxes:</strong> These are imposed by local authorities such as municipalities and local governments.</li>
+                    </ul>
+                    <p>Taxes in India are levied by the Central Government and the State Governments by the virtue of powers conferred to them from the Constitution of India. Some minor taxes are also levied by the local authorities such as municipalities.</p>
+                    <p><strong>Corporate Tax:</strong> This is the tax paid on the company’s taxable income. Here again, a specific tax rate for corporations has been prescribed by the income tax laws of India.</p>
+                    <p>For more detailed information, visit the official <a href="https://www.incometaxindia.gov.in/pages/tax-laws-and-rules.aspx" target="_blank">Income Tax Department of India</a> website.</p>
+                `;
+            } else if (contentType === 'finesPenalties') {
+                content = `
+                    <h2>Fines and Penalties in the Indian Tax System</h2>
+                    <p>In India, the tax system is governed by the Income Tax Act, 1961. The Act imposes penalties and fines for various non-compliances and violations. Here are some key penalties and fines related to the Indian tax system:</p>
+                    <ul>
+                        <li><strong>Late Filing of Income Tax Returns:</strong> If an individual or a business fails to file their income tax return by the due date, they may be subject to a penalty. The penalty amount depends on the delay in filing the return. For example, if the return is filed within one year from the due date, the penalty is Rs. 5,000. If the return is filed after one year but before the completion of the assessment, the penalty is Rs. 10,000.</li>
+                        <li><strong>Underreporting of Income:</strong> If an individual or a business underreports their income, they may be subject to a penalty. The penalty amount is 50% of the tax payable on the underreported income.</li>
+                        <li><strong>Non-payment of Tax:</strong> If an individual or a business fails to pay their tax dues by the due date, they may be subject to interest charges. The interest rate is 1% per month for the period of delay.</li>
+                        <li><strong>Non-deduction of Tax at Source (TDS):</strong> If an employer fails to deduct tax at source (TDS) from the salary of an employee, they may be subject to a penalty. The penalty amount is equal to the amount of tax that should have been deducted.</li>
+                        <li><strong>Non-compliance with Tax Deduction and Collection at Source (TDS/TCS):</strong> If a person responsible for deducting or collecting tax at source (TDS/TCS) fails to comply with the provisions of the Act, they may be subject to a penalty. The penalty amount is equal to the amount of tax that should have been deducted or collected.</li>
+                        <li><strong>Non-maintenance of Books of Accounts:</strong> If a business fails to maintain proper books of accounts, they may be subject to a penalty. The penalty amount is Rs. 25,000 for each year of default.</li>
+                        <li><strong>Non-furnishing of Information:</strong> If a person fails to furnish information or documents required under the Act, they may be subject to a penalty. The penalty amount is Rs. 10,000 for each default.</li>
+                        <li><strong>Non-compliance with Transfer Pricing Regulations:</strong> If a multinational enterprise fails to comply with the transfer pricing regulations, they may be subject to a penalty. The penalty amount is 3% of the adjusted transfer price.</li>
+                        <li><strong>Non-compliance with Anti-Money Laundering (AML) Regulations:</strong> If a person fails to comply with the AML regulations, they may be subject to a penalty. The penalty amount is up to Rs. 1 crore.</li>
+                        <li><strong>Non-compliance with Goods and Services Tax (GST) Regulations:</strong> If a business fails to comply with the GST regulations, they may be subject to a penalty. The penalty amount depends on the nature and extent of the non-compliance.</li>
+                    </ul>
+                `;
+            }
+            document.getElementById("modalContent").innerHTML = content;
+            document.getElementById("myModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
+
+        // Close the modal when clicking outside of the modal content
+        window.onclick = function(event) {
+            var modal = document.getElementById("myModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
